@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ProjectModuleManager">
+    <modules>
+      <module fileurl="file://$PROJECT_DIR$/gounanjiao.iml" filepath="$PROJECT_DIR$/gounanjiao.iml" />
+      <module fileurl="file://$PROJECT_DIR$/gounanjiao-api/gounanjiao-api.iml" filepath="$PROJECT_DIR$/gounanjiao-api/gounanjiao-api.iml" />
+      <module fileurl="file://$PROJECT_DIR$/gounanjiao-common/gounanjiao-common.iml" filepath="$PROJECT_DIR$/gounanjiao-common/gounanjiao-common.iml" />
+      <module fileurl="file://$PROJECT_DIR$/gounanjiao-gateway/gounanjiao-gateway.iml" filepath="$PROJECT_DIR$/gounanjiao-gateway/gounanjiao-gateway.iml" />
+      <module fileurl="file://$PROJECT_DIR$/renren-fast/renren-fast.iml" filepath="$PROJECT_DIR$/renren-fast/renren-fast.iml" />
+      <module fileurl="file://$PROJECT_DIR$/renren-generator/renren-generator.iml" filepath="$PROJECT_DIR$/renren-generator/renren-generator.iml" />
+    </modules>
+  </component>
+</project>

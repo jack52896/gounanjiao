@@ -1,0 +1,136 @@
+<div th:fragment="html" xmlns:v-bind="http://www.w3.org/1999/xhtml" xmlns="http://www.w3.org/1999/html">
+  <script>
+    function add() {
+      $("#couponModal").modal('show');
+    }
+    function deleted(cid){
+      var cid = cid;
+      var url3 = "gounanjiaoapi/coupon/delete";
+      axios.post(url3,
+              [
+                cid
+              ]).then(function (response) {
+        if(response.data.code==0){
+          $("#successModal").modal('show');
+        }else{
+          $("#failModal").modal('show');
+        }
+      });
+    }
+
+    $(function () {
+      var data4Vue = {
+        uri:'gounanjiaoapi/businesslog/listbyuid',
+        coupons: [],
+        coupon:{name:'',promotemoney: '', getDate:'', expireDate:''}
+      };
+      //ViewModel
+      var vue = new Vue({
+        el: '#workingArea',
+        data: data4Vue,
+        mounted:function(){
+          linkDefaultActions();
+          this.load();
+        },
+        methods: {
+          load:function () {
+            var url2 = "gounanjiaoapi/coupon/listbyuid";
+            axios.get(url2).then(function (response) {
+              vue.coupons = response.data.page.list;
+              console.log(vue.coupons);
+            })
+          },
+          format_date(value){
+            if (value) {
+              return moment(String(value)).format('YYYY-MM-DD HH:mm:ss')
+            }
+          }
+        }
+      })
+      $(".addCouponSubmitButton").click(function () {
+        var url2 = "gounanjiaoapi/coupon/save";
+        axios.post(url2,vue.coupon).then(function (response) {
+          if(response.data.code==0){
+            $("#successModal").modal('show');
+          }else{
+            $("#failModal").modal('show');
+          }
+        });
+      });
+    });
+  </script>
+  <nav class="navbar navbar-inverse navbar-fixed-top">
+    <div class="container-fluid">
+      <div class="navbar-header">
+        <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
+          <span class="sr-only"></span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+        </button>
+        <a class="navbar-brand" href="#">购南交商家系统</a>
+      </div>
+      <div id="navbar" class="navbar-collapse collapse">
+        <ul class="nav navbar-nav navbar-right">
+
+          <li><a href="login" th:text="${loginUser.name}"></a></li>
+          <li ><a href="forelogout" >退出</a></li>
+
+        </ul>
+        <form class="navbar-form navbar-right">
+          <input type="text" class="form-control" placeholder="搜索">
+        </form>
+      </div>
+    </div>
+  </nav>
+
+  <div class="container-fluid">
+    <div class="row">
+      <div class="col-sm-3 col-md-2 sidebar">
+        <ul class="nav nav-sidebar">
+          <li><a href="/businessGo">概况 <span class="sr-only">(current)</span></a></li>
+          <li><a href="/productinfo">产品信息</a></li>
+          <li><a href="/orderinfo">订单信息</a></li>
+          <li class="active"><a href="/couponinfo">优惠卷信息</a></li>
+          <li><a href="/productimageinfo">产品图片信息</a></li>
+        </ul>
+      </div>
+      <div class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main">
+          <!-- div class-->
+        <div >
+          <button class = "btn btn-success" @click="add()">新增</button>
+        </div>
+        <br>
+        <div class="table-responsive">
+          <table class="table table-striped table-bordered table-hover table-condensed">
+            <thead>
+            <tr>
+              <th>#</th>
+              <th>优惠卷名称</th>
+              <th>减免金额</th>
+              <th>优惠卷创建时间</th>
+              <th>优惠卷过期时间</th>
+              <th>操作</th>
+            </tr>
+            </thead>
+            <tbody v-for="c in coupons">
+            <tr>
+              <td>{{ c.id }}</td>
+              <td>{{ c.name }}</td>
+              <td>{{ c.promotemoney }}</td>
+              <td>{{ format_date(c.getDate) }}</td>
+              <td>{{ format_date(c.expireDate) }}</td>
+              <td>
+                <span>
+                  <button class="btn btn-primary" @click="edit(c.id)">修改</button>
+                  <button class="btn btn-danger" @click="deleted(c.id)">删除</button>
+                </span>
+              </td>
+            </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

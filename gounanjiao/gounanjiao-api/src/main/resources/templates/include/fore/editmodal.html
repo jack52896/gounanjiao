@@ -1,0 +1,29 @@
+<div th:fragment="html" class="modal fade" id="editproductModal" tabindex="-1" role="dialog"
+     xmlns:v-bind="http://www.w3.org/1999/xhtml">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">×</span></button>
+        <h4 class="modal-title">edit产品</h4>
+      </div>
+      <div class="modal-body">
+        <label class="control-label">产品名称</label>
+        <input type="text" class="form-control" v-model="product.name">
+        <label class="control-label">产品副标题</label>
+        <input type="text" class="form-control" v-model="product.subtitle">
+        <label class="control-label">产品原价</label>
+        <input type="text" class="form-control" v-model="product.originalprice" >
+        <label class="control-label">产品促销价</label>
+        <input type="text" class="form-control" v-model="product.promoteprice">
+        <label class="control-label">产品库存</label>
+        <input type="text" class="form-control" v-model="product.stock">
+        <label class="control-label">分类id</label>
+        <input type="text" class="form-control" v-model="product.cid">
+      </div>
+      <div class="modal-footer">
+        <button class="btn btn-primary editProductSubmitButton" @click="editProductSubmitButton()">提交修改</button>
+      </div>
+    </div>
+  </div>
+</div>

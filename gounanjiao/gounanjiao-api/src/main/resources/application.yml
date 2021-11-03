@@ -1,0 +1,45 @@
+# 应用名称
+spring:
+  application:
+    name: gounanjiao-api
+  cloud:
+    nacos:
+      config:
+        server-addr: 192.168.174.110:8847
+      discovery:
+        server-addr: 192.168.174.110:8847
+        namespace: 6babf0e8-5f39-4581-9c96-d3b69a2bfb75
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://192.168.174.110:3311/gounianjiao?characterEncoding=utf8&useSSL=false&serverTimezone=Asia/Shanghai&rewriteBatchedStatements=true
+    username: root
+    password: abc123456
+    type: com.zaxxer.hikari.HikariDataSource
+    hikari:
+      maximum-pool-size: 15
+      minimum-idle: 5
+      idle-timeout: 30000
+  thymeleaf:
+    cache: false
+    encoding: UTF-8
+    servlet:
+      content-type: text/html
+  jpa:
+    database: mysql
+  redis:
+    database: 0
+    host: 192.168.174.111
+    port: 6379
+mybatis-plus:
+  configuration:
+    log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
+  mapper-locations: classpath*:/mapper/**/*.xml
+  global-config:
+    db-config:
+      logic-delete-value: 0
+      id-type: auto
+      logic-not-delete-value: 1
+server:
+  port: 2000
+
+

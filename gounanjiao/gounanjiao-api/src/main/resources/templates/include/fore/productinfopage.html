@@ -1,0 +1,208 @@
+<div th:fragment="html" xmlns:v-bind="http://www.w3.org/1999/xhtml" xmlns="http://www.w3.org/1999/html">
+  <script>
+    function add() {
+      $("#productModal").modal('show');
+    }
+    $(function () {
+      var data4Vue = {
+        uri:'gounanjiaoapi/businesslog/listByUid',
+        products: [],
+        product:{id:'', name:'', subtitle:'', originalprice:'',promoteprice:'',stock:'',cid:''},
+        editproduct:{}
+      };
+      //ViewModel
+      var vue = new Vue({
+        el: '#workingArea',
+        data: data4Vue,
+        mounted:function(){
+          linkDefaultActions();
+          this.load();
+        },
+        methods: {
+          load:function () {
+            var url = "gounanjiaoapi/product/listByUid";
+            axios.get(url).then(function (response) {
+              vue.products = response.data.page.list;
+              console.log(vue.products);
+            })
+          },
+          format_date(value){
+            if (value) {
+              return moment(String(value)).format('YYYY-MM-DD HH:mm:ss')
+            }
+          },
+          edit:function(pid){
+            vue.product.id = pid;
+            $("#editproductModal").modal('show');
+          },
+          deleted:function(pid){
+        var pid = pid;
+        var url3 = "gounanjiaoapi/product/delete";
+        axios.post(url3,
+                [
+                  pid
+                ]).then(function (response) {
+          if(response.data.code==0){
+            $("#successModal").modal('show');
+            vue.load();
+          }else{
+            $("#failModal").modal('show');
+            vue.load();
+          }
+        });
+      },
+          shangjia:function(pid){
+            var pid = pid;
+            var url = "/gounanjiaoapi/product/editproductstatus?pid="+pid;
+            axios.post(url).then(function(response){
+              if(response.data.code == 0){
+                $("#successModal").modal('show');
+                vue.load();
+              }else{
+                $("#failModal").modal('show');
+                vue.load();
+              }
+            });
+          },
+          xiajia:function(pid){
+            var pid = pid;
+            var url = "/gounanjiaoapi/product/editproductstatustoxiajia?pid="+pid;
+            axios.post(url).then(function(response){
+              if(response.data.code == 0){
+                $("#successModal").modal('show');
+                vue.load();
+              }else{
+                $("#failModal").modal('show');
+                vue.load();
+              }
+            });
+          },
+          editProductSubmitButton:function(){
+            var url = "gounanjiaoapi/product/update";
+            axios.post(url, vue.product).then(function(response){
+              if(response.data.code==0){
+                $("#successModal").modal('show');
+                $("#editproductModal").modal('hide');
+                vue.load();
+              }else{
+                $("#failModal").modal('show');
+                $("#editproductModal").modal('hide');
+                vue.load();              }
+            });
+          }
+        }
+      });
+      console.log($(".addProductSubmitButton"));
+      $(".addProductSubmitButton").click(function () {
+        var url2 = "gounanjiaoapi/product/save";
+        axios.post(url2,vue.product).then(function (response) {
+          if(response.data.code==0){
+            $("#successModal").modal('show');
+          }else{
+            $("#failModal").modal('show');
+          }
+        });
+      });
+
+    });
+
+  </script>
+  <nav class="navbar navbar-inverse navbar-fixed-top">
+    <div class="container-fluid">
+      <div class="navbar-header">
+        <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
+          <span class="sr-only"></span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+        </button>
+        <a class="navbar-brand" href="#">购南交商家系统</a>
+      </div>
+      <div id="navbar" class="navbar-collapse collapse">
+        <ul class="nav navbar-nav navbar-right">
+
+          <li><a href="login" th:text="${loginUser.name}"></a></li>
+          <li ><a href="forelogout" >退出</a></li>
+
+        </ul>
+        <form class="navbar-form navbar-right">
+          <input type="text" class="form-control" placeholder="搜索">
+        </form>
+      </div>
+    </div>
+  </nav>
+
+  <div class="container-fluid">
+    <div class="row">
+      <div class="col-sm-3 col-md-2 sidebar">
+        <ul class="nav nav-sidebar">
+          <li><a href="/businessGo">概况 <span class="sr-only">(current)</span></a></li>
+          <li class="active"><a href="/productinfo">产品信息</a></li>
+          <li><a href="/orderinfo">订单信息</a></li>
+          <li><a href="/couponinfo">优惠卷信息</a></li>
+          <li><a href="/productimageinfo">产品图片信息</a></li>
+        </ul>
+      </div>
+      <div>
+        <button class = "btn btn-success" @click="add()">新增</button>
+      </div>
+      <div class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main">
+          <!-- div class-->
+        <div >
+          <button class = "btn btn-success" @click="add()">新增</button>
+        </div>
+        <br>
+        <div class="table-responsive">
+          <table class="table table-striped table-bordered table-hover table-condensed">
+            <thead>
+            <tr>
+              <th>#</th>
+              <th>产品名称</th>
+              <th>产品副标题</th>
+              <th>产品原价</th>
+              <th>产品促销价</th>
+              <th>产品库存</th>
+              <th>产品所属分类</th>
+              <th>产品添加时间</th>
+              <th>商品状态</th>
+              <th>操作</th>
+            </tr>
+            </thead>
+            <tbody v-for="p in products">
+            <tr>
+              <td><span class="label label-default">{{ p.id }}</span></td>
+              <td><span class="label label-success">{{ p.name }}</span></td>
+              <td><span class="label label-danger">{{ p.subtitle }}</span></td>
+              <td><span class="label label-primary">{{ p.originalprice }}</span></td>
+              <td><span class="label label-success">{{ p.promoteprice }}</span></td>
+              <td><span class="label label-info">{{ p.stock }}</span></td>
+              <td><span class="label label-warning">{{ p.cid }}</span></td>
+              <td>{{ format_date(p.createdate) }}</td>
+              <td>
+                <template>
+                  <span class="label label-warning" v-if="p.status=='0'">未上架</span>
+                  <span class="label label-success" v-if="p.status=='1'">已上架</span>
+                  <span class="label label-warning" v-if="p.status=='2'">状态异常, 请重新提交申请</span>
+                  <span class="label label-danger" v-if="p.status=='3'">上架申请中</span>
+                </template>
+              </td>
+              <td>
+                <span>
+                  <template>
+                    <button class="btn btn-success" @click="shangjia(p.id)" v-if="p.status=='0'">申请上架</button>
+                    <button class="btn btn-info" @click="xiajia(p.id)" v-if="p.status=='1'">下架</button>
+                    <button class="btn btn-danger" @click="shangjia(p.id)" v-if="p.status=='2'">申请上架</button>
+                  </template>
+                  <button class="btn btn-primary" @click="edit(p.id)">修改</button>
+                  <button class="btn btn-danger" @click="deleted(p.id)">删除</button>
+                </span>
+              </td>
+              <td><div th:replace="include/fore/editmodal::html" ></div></td>
+            </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

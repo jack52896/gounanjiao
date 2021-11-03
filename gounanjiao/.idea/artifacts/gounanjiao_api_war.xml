@@ -1,0 +1,14 @@
+<component name="ArtifactManager">
+  <artifact type="war" name="gounanjiao-api:war">
+    <output-path>$PROJECT_DIR$/gounanjiao-api/target</output-path>
+    <properties id="maven-jee-properties">
+      <options>
+        <module>gounanjiao-api</module>
+        <packaging>war</packaging>
+      </options>
+    </properties>
+    <root id="archive" name="gounanjiao-api-0.0.1-SNAPSHOT.war">
+      <element id="artifact" artifact-name="gounanjiao-api:war exploded" />
+    </root>
+  </artifact>
+</component>
